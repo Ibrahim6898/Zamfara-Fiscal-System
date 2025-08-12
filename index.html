@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zamfara Fiscal System</title>
+    <!-- Favicon -->
+    <link rel="icon" href="c:\Users\PC\Documents\ZamfaraFiscal\logo.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f3f4f6;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+        /* Styles for the login/registration page container */
+        .auth-page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            grid-row: 1 / span 2;
+            background-color: #f3f4f6;
+            z-index: 2000;
+        }
+        .auth-container {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            color: #2d3748;
+        }
+        .auth-logo img {
+            height: 60px;
+            margin-right: 1rem;
+            border-radius: 50%;
+        }
+        .auth-logo span {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .auth-container h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            color: #2d3748;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        /* Input error state */
+        .input-group input.input-error {
+            border-color: #ef4444; /* Red-500 */
+        }
+        .input-group .input-error-message {
+            color: #e53e3e; /* Red-600 */
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none; /* Hidden by default */
+        }
+        .input-group .input-error-message.show {
+            display: block;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: #28a745; /* Green */
+            color: white;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .auth-btn:hover {
+            background-color: #228b3c;
+        }
+        .error-message, .success-message { /* Combined styles for messages */
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        .error-message {
+            color: #e53e3e;
+            background-color: #fee2e2; /* Red-100 */
+            border: 1px solid #ef4444; /* Red-500 */
+        }
+        .success-message {
+            color: #10b981; /* Green-500 */
+            background-color: #d1fae5; /* Green-100 */
+            border: 1px solid #10b981;
+        }
+        .error-message.show, .success-message.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .auth-links {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #4a5568;
+            display: flex;
+            justify-content: space-between;
+        }
+        .auth-links a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        .auth-switch-link {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        .auth-switch-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-switch-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard specific styles */
+        header {
+            background-color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 1rem 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            color: #2d3748;
+        }
+        .header-logo img {
+            height: 40px;
+            margin-right: 0.75rem;
+            border-radius: 50%;
+        }
+        .header-logo span {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer; /* Make username clickable */
+        }
+        .user-profile i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: #4a5568;
+        }
+        .user-profile span {
+            font-weight: 600;
+            margin-right: 1.5rem;
+            color: #2d3748;
+        }
+        .logout-btn {
+            background-color: #e53e3e; /* Red */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .logout-btn:hover {
+            background-color: #c53030;
+        }
+        /* Global Search Bar */
+        .search-bar {
+            flex-grow: 1;
+            max-width: 400px;
+            margin: 0 1rem;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            padding-left: 2.5rem; /* Space for icon */
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            color: #2d3748;
+            background-color: #f8f8f8;
+        }
+        .search-bar i {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+
+        /* Menu icon for mobile */
+        .menu-icon {
+            font-size: 1.75rem;
+            color: #2d3748;
+            cursor: pointer;
+            display: none; /* Hidden by default, shown on mobile */
+        }
+
+        /* Main content area (sidebar + dashboard content) */
+        .content-area-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr; /* Fixed 280px sidebar, rest for main content */
+            flex-grow: 1; /* Allow content area to take remaining vertical space */
+            padding: 1.5rem 0 0 0; /* Padding for gap below header, right/bottom padding from main-content */
+        }
+
+        .sidebar {
+            grid-column: 1; /* Places sidebar in the first column */
+            background-color: #28a745; /* Green */
+            color: white;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0 1.5rem 1.5rem 0; /* Rounded only on the right side */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%; /* Stretches to fill the height of its grid cell */
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Close icon for mobile sidebar */
+        .sidebar-close-icon {
+            font-size: 1.5rem;
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            color: white;
+            display: none; /* Hidden by default, shown on mobile sidebar */
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border-radius: 0.75rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+        .sidebar-nav-item:hover, .sidebar-nav-item.active {
+            background-color: #ffffff;
+            color: #28a745; /* Green */
+            font-weight: 500;
+        }
+        .sidebar-nav-item i {
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+        main.main-content { /* Changed div to main and added padding */
+            grid-column: 2;
+            padding: 0 2rem 2rem 2rem; /* Consistent padding, removed top as content-area-grid handles it */
+            background-color: #f3f4f6;
+        }
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 2rem;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .summary-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.75rem;
+        }
+        .summary-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .chart-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .chart-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+        .chart-card canvas {
+            max-height: 250px;
+            width: 100% !important;
+            height: auto !important;
+        }
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .info-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        /* Recent Activity Log */
+        .activity-log-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-top: 1.5rem;
+        }
+        .activity-log-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+        .activity-log-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .activity-log-card li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        .activity-log-card li:last-child {
+            border-bottom: none;
+        }
+        .activity-log-card li span {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        /* No data message for tables/lists */
+        .no-data-message {
+            text-align: center;
+            padding: 1rem;
+            color: #6b7280; /* Gray-500 */
+            font-style: italic;
+        }
+
+
+        /* --- Modal Styles --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Higher than header and sidebar */
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-backdrop.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-backdrop.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #4a5568;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .modal-buttons button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-buttons .confirm-btn {
+            background-color: #e53e3e; /* Red */
+            color: white;
+        }
+        .modal-buttons .confirm-btn:hover {
+            background-color: #c53030;
+        }
+        .modal-buttons .cancel-btn {
+            background-color: #e2e8f0; /* Light gray */
+            color: #2d3748;
+        }
+        .modal-buttons .cancel-btn:hover {
+            background-color: #cbd5e0;
+        }
+
+        /* User Profile Modal */
+        .profile-modal-content {
+            text-align: left;
+        }
+        .profile-modal-content .input-group {
+            margin-bottom: 1rem;
+        }
+        .profile-modal-content .profile-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .profile-modal-content .profile-buttons button {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        .profile-modal-content .profile-buttons .save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .profile-modal-content .profile-buttons .save-btn:hover {
+            background-color: #228b3c;
+        }
+        .profile-modal-content .profile-buttons .close-btn {
+            background-color: #e2e8f0;
+            color: #2d3748;
+        }
+        .profile-modal-content .profile-buttons .close-btn:hover {
+            background-color: #cbd5e0;
+        }
+
+
+        /* --- Loading Spinner Styles --- */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000; /* Above everything else */
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .loading-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #28a745; /* Green */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Table Sorting Indicators --- */
+        th[data-sort] {
+            position: relative;
+        }
+        th[data-sort] i {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: color 0.2s;
+        }
+        th[data-sort]:hover i, th[data-sort].sort-active i {
+            color: #2d3748; /* Darker on hover/active */
+        }
+
+
+        /* --- Responsive adjustments --- */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px; /* Adjust sidebar width for smaller desktops */
+            }
+            .content-area-grid {
+                grid-template-columns: 220px 1fr; /* Adjust grid columns to match sidebar */
+            }
+            main.main-content {
+                padding: 0 1.5rem 1.5rem 1.5rem; /* Slightly reduced padding */
+            }
+            .dashboard-title {
+                font-size: 1.75rem;
+            }
+            .summary-card p {
+                font-size: 1.75rem;
+            }
+            .chart-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                grid-template-rows: auto 1fr; /* Still header then content */
+            }
+            header {
+                flex-direction: row; /* Keep logo and hamburger side-by-side */
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                border-radius: 0;
+            }
+            .header-logo {
+                margin-bottom: 0;
+                width: auto;
+            }
+            .user-profile {
+                display: none; /* Hide user profile and logout button on mobile header */
+            }
+            .logout-btn {
+                display: none; /* Hide logout button on mobile header */
+            }
+            .search-bar { /* Hide search bar on mobile header */
+                display: none;
+            }
+
+            .menu-icon {
+                display: block; /* Show menu icon on mobile */
+            }
+
+            .content-area-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                grid-template-rows: auto 1fr; /* Sidebar then main content (hidden initially) */
+                padding: 0; /* No padding on the grid itself for mobile */
+                position: relative; /* For absolute positioning of sidebar */
+            }
+            .sidebar {
+                grid-column: 1;
+                grid-row: 1; /* Sidebar is in the first row of content-area-grid */
+                width: 100%;
+                position: fixed; /* Fixed position relative to viewport */
+                top: 0; /* Position at the very top of the viewport */
+                left: 0; /* Align to the left edge */
+                height: 100%; /* Take full height of viewport */
+                padding-top: 5rem; /* Space for header in overlay mode */
+                border-radius: 0; /* No rounded corners when fixed overlay */
+                box-shadow: none; /* No shadow when full screen */
+                transform: translateX(-100%); /* Start hidden to the left */
+                transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+                z-index: 1500; /* Above main content, below modal backdrop */
+                opacity: 0;
+                pointer-events: none;
+            }
+            .sidebar.sidebar-open {
+                transform: translateX(0); /* Slide in from left */
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .sidebar-close-icon {
+                display: block; /* Show close icon in mobile sidebar */
+                position: absolute; /* Relative to sidebar */
+                top: 1.5rem; /* Adjust based on new sidebar padding-top */
+                right: 1.5rem;
+                z-index: 1; /* Ensure it's above other sidebar content */
+            }
+            main.main-content {
+                grid-column: 1;
+                grid-row: 2; /* Main content is in the second row of content-area-grid */
+                padding: 1rem; /* Adjust padding for mobile */
+                margin-top: 0; /* No margin top here, content-area-grid manages it */
+            }
+            .dashboard-title {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            .summary-cards, .chart-section, .info-cards {
+                grid-template-columns: 1fr;
+            }
+            .summary-card p {
+                font-size: 1.5rem;
+            }
+            .chart-card {
+                padding: 1.5rem;
+            }
+            .chart-card canvas {
+                max-height: 200px;
+            }
+            .info-card {
+                font-size: 1rem;
+            }
+
+            /* Mobile Backdrop for Sidebar */
+            .sidebar-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
+                z-index: 1400; /* Below sidebar, above main content */
+                visibility: hidden;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            }
+            .sidebar-backdrop.show {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="appContainer">
+        <!-- Authentication Page Container (Login or Registration) -->
+        <div class="auth-page-container" id="authPage">
+            <!-- Login Form -->
+            <div class="auth-container" id="loginFormContainer">
+                <div class="auth-logo">
+                    <img src="c:\Users\PC\Documents\ZamfaraFiscal\logo.png" alt="Logo">
+                    <span>Zamfara Fiscal System</span>
+                </div>
+                <h2>Admin Login</h2>
+                <form id="loginForm" aria-live="polite">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter your username" aria-required="true">
+                        <span class="input-error-message" id="usernameError"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" aria-required="true">
+                        <span class="input-error-message" id="passwordError"></span>
+                    </div>
+                    <button type="submit" class="auth-btn">Login</button>
+                    <p id="errorMessage" class="error-message" role="alert">Invalid username or password.</p>
+                </form>
+                <div class="auth-links">
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                    <a href="#" id="showRegisterLink">Register</a>
+                </div>
+            </div>
+
+            <!-- Registration Form (Initially hidden) -->
+            <div class="auth-container hidden" id="registerFormContainer">
+                <div class="auth-logo">
+                    <img src="c:\Users\PC\Documents\ZamfaraFiscal\logo.png" alt="Logo">
+                    <span>Zamfara Fiscal System</span>
+                </div>
+                <h2>Register Account</h2>
+                <form id="registerForm" aria-live="polite">
+                    <div class="input-group">
+                        <label for="regUsername">Username</label>
+                        <input type="text" id="regUsername" placeholder="Choose a username" aria-required="true">
+                        <span class="input-error-message" id="regUsernameError"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" placeholder="Enter your email" aria-required="true">
+                        <span class="input-error-message" id="regEmailError"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" placeholder="Create a password" aria-required="true">
+                        <span class="input-error-message" id="regPasswordError"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" placeholder="Confirm your password" aria-required="true">
+                        <span class="input-error-message" id="regConfirmPasswordError"></span>
+                    </div>
+                    <button type="submit" class="auth-btn">Register</button>
+                    <p id="registerErrorMessage" class="error-message" role="alert">Registration failed. Please try again.</p>
+                    <p id="registerSuccessMessage" class="success-message" role="status">Registration successful!</p>
+                </form>
+                <p class="auth-switch-link">
+                    Already have an account? <a href="#" id="showLoginLink">Login here</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Dashboard Content (hidden until logged in) -->
+        <div id="dashboardPage" style="display: none;">
+            <header>
+                <div class="header-logo">
+                    <img src="c:\Users\PC\Documents\ZamfaraFiscal\logo.png" alt="Zamfara Fiscal System Logo">
+                    <span>Zamfara Fiscal System</span>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="globalSearchInput" placeholder="Search transactions, MDAs, reports..." aria-label="Global Search">
+                </div>
+                <i class="fas fa-bars menu-icon" id="menuToggle" role="button" aria-label="Open navigation menu" aria-expanded="false"></i>
+                <div class="user-profile desktop-only" role="button" aria-label="User profile and settings" tabindex="0"> <!-- Added tabindex for accessibility -->
+                    <i class="fas fa-user-circle"></i>
+                    <span id="loggedInUsername">Yusuf Ali</span> <!-- Dynamic username -->
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <div class="content-area-grid">
+                <div class="sidebar" id="sidebar" role="navigation">
+                    <i class="fas fa-times sidebar-close-icon" id="sidebarClose" role="button" aria-label="Close navigation menu"></i>
+                    <nav>
+                        <a href="#" class="sidebar-nav-item active" data-content="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="mda-menu" data-roles="admin,auditor,data_entry">
+                            <i class="fas fa-bars"></i>
+                            <span>MDA Main Menu</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="capex-tracker" data-roles="admin,data_entry">
+                            <i class="fas fa-chart-line"></i>
+                            <span>CAPEX Tracker</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="budget-review" data-roles="admin,auditor">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Budget Review</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="reports-analytics" data-roles="admin,auditor,data_entry">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="payment-voucher" data-roles="admin,data_entry">
+                            <i class="fas fa-money-check-alt"></i>
+                            <span>Payment Voucher</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="admin-settings" data-roles="admin">
+                            <i class="fas fa-cog"></i>
+                            <span>Admin Settings</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="audit-log" data-roles="admin,auditor"> <!-- New Audit Log page -->
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Audit Log</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="my-profile" data-roles="admin,auditor,data_entry"> <!-- New My Profile page -->
+                            <i class="fas fa-user-circle"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" data-content="about">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <main class="main-content">
+                    <h2 class="dashboard-title">Dashboard</h2>
+
+                    <div id="dashboard-content" class="content-section active-content">
+                        <div class="summary-cards">
+                            <div class="summary-card">
+                                <h3>Total Budget</h3>
+                                <p id="totalBudget">₦ 50 B</p>
+                            </div>
+                            <div class="summary-card">
+                                <h3>Total Spent</h3>
+                                <p id="totalSpent">₦ 32 B</p>
+                            </div>
+                            <div class="summary-card">
+                                <h3>Remaining</h3>
+                                <p id="remainingBudget">₦ 18 B</p>
+                            </div>
+                        </div>
+
+                        <div class="chart-section">
+                            <div class="chart-card">
+                                <h3>Expenditure by MDA</h3>
+                                <canvas id="expenditureChart" width="400" height="200"></canvas>
+                                <div class="flex justify-center mt-4 space-x-4">
+                                    <div class="flex items-center">
+                                        <span class="inline-block w-4 h-4 bg-blue-500 rounded-full mr-2"></span>
+                                        <span>Allocated</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="inline-block w-4 h-4 bg-green-500 rounded-full mr-2"></span>
+                                        <span>Actual</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-card">
+                                <h3>CAPEX vs OPEX</h3>
+                                <canvas id="capexOpexChart" width="400" height="200"></canvas>
+                                <div class="flex justify-center mt-4 space-x-4">
+                                    <div class="flex items-center">
+                                        <span class="inline-block w-4 h-4 bg-blue-500 rounded-full mr-2"></span>
+                                        <span>CAPEX</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="inline-block w-4 h-4 bg-teal-500 rounded-full mr-2"></span>
+                                        <span>OPEX</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- New: Recent Activity Log on Dashboard -->
+                        <div class="activity-log-card">
+                            <h3>Recent Activity</h3>
+                            <ul id="recentActivityList">
+                                <!-- Activity items will be populated by JS -->
+                                <li class="no-data-message">No recent activity.</li>
+                            </ul>
+                        </div>
+
+                        <button id="refreshDataBtn" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh Dashboard Data
+                        </button>
+                    </div>
+
+                    <!-- MDA Main Menu Content -->
+                    <div id="mda-menu-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">MDA Main Menu</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">View and manage all Ministerial Departments and Agencies.</p>
+                            <div class="mb-4 flex flex-wrap gap-4 items-center">
+                                <input type="text" id="mdaFilterName" placeholder="Filter by MDA Name" class="flex-grow border border-gray-300 rounded-md shadow-sm p-2 text-sm max-w-xs" aria-label="Filter by MDA Name">
+                                <select id="mdaFilterSector" class="border border-gray-300 rounded-md shadow-sm p-2 text-sm" aria-label="Filter by Sector">
+                                    <option value="">All Sectors</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Infrastructure">Infrastructure</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Administration">Administration</option>
+                                </select>
+                                <button id="mdaApplyFilterBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-sm transition duration-200">Apply Filter</button>
+                                <button id="exportMdaCsvBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200"><i class="fas fa-file-csv mr-2"></i> Export to CSV</button>
+                            </div>
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                <thead>
+                                    <tr class="bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="mdaName" aria-sort="none">MDA Name <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="sector" aria-sort="none">Sector <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="budget" aria-sort="none">Budget (₦) <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mdaTableBody">
+                                    <!-- MDA rows will be populated by JS -->
+                                    <tr><td colspan="4" class="no-data-message">No MDA data found.</td></tr>
+                                </tbody>
+                            </table>
+                            <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Add New MDA</button>
+                        </div>
+                    </div>
+
+                    <!-- CAPEX Tracker Content -->
+                    <div id="capex-tracker-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">CAPEX Tracker</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Track Capital Expenditure projects and their progress.</p>
+                            <form id="capexForm" class="space-y-4">
+                                <div>
+                                    <label for="projectName" class="block text-sm font-medium text-gray-700">Project Name</label>
+                                    <input type="text" id="projectName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Road Construction Phase 2" required aria-required="true">
+                                    <span class="input-error-message" id="projectNameError"></span>
+                                </div>
+                                <div>
+                                    <label for="mdaSelect" class="block text-sm font-medium text-gray-700">MDA</label>
+                                    <select id="mdaSelect" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required aria-required="true">
+                                        <option value="">Select MDA</option>
+                                        <option>Ministry of Works</option>
+                                        <option>Ministry of Education</option>
+                                        <option>Ministry of Health</option>
+                                    </select>
+                                    <span class="input-error-message" id="mdaSelectError"></span>
+                                </div>
+                                <div>
+                                    <label for="allocatedAmount" class="block text-sm font-medium text-gray-700">Allocated Amount (₦)</label>
+                                    <input type="number" id="allocatedAmount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 500000000" required aria-required="true">
+                                    <span class="input-error-message" id="allocatedAmountError"></span>
+                                </div>
+                                <div>
+                                    <label for="expendedAmount" class="block text-sm font-medium text-gray-700">Expended Amount (₦)</label>
+                                    <input type="number" id="expendedAmount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 250000000" required aria-required="true">
+                                    <span class="input-error-message" id="expendedAmountError"></span>
+                                </div>
+                                <div>
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select id="status" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required aria-required="true">
+                                        <option>In Progress</option>
+                                        <option>Completed</option>
+                                        <option>Pending</option>
+                                    </select>
+                                    <span class="input-error-message" id="statusError"></span>
+                                </div>
+                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Add CAPEX Entry</button>
+                            </form>
+                            <p id="capexFormSuccess" class="success-message" role="status">CAPEX entry added successfully!</p>
+                        </div>
+                    </div>
+
+                    <!-- Budget Review Content -->
+                    <div id="budget-review-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Budget Review</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Review and compare budget allocations and expenditures across MDAs.</p>
+                            <div class="mb-4 flex flex-wrap gap-4 items-center">
+                                <select id="budgetFilterYear" class="border border-gray-300 rounded-md shadow-sm p-2 text-sm" aria-label="Filter by Year">
+                                    <option value="">Select Year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                                <select id="budgetFilterMda" class="border border-gray-300 rounded-md shadow-sm p-2 text-sm" aria-label="Filter by MDA">
+                                    <option value="">All MDAs</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Works">Works</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Administration">Administration</option>
+                                </select>
+                                <button id="budgetApplyFilterBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-sm transition duration-200">Apply Filter</button>
+                                <button id="exportBudgetCsvBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200"><i class="fas fa-file-csv mr-2"></i> Export to CSV</button>
+                            </div>
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                <thead>
+                                    <tr class="bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="mda" aria-sort="none">MDA <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="category" aria-sort="none">Category <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="allocated" aria-sort="none">Allocated (₦) <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="spent" aria-sort="none">Spent (₦) <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                        <th class="py-3 px-4 border-b cursor-pointer" data-sort="variance" aria-sort="none">Variance (₦) <i class="fas fa-sort text-gray-400 ml-1"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="budgetTableBody">
+                                    <!-- Budget rows will be populated by JS -->
+                                    <tr><td colspan="5" class="no-data-message">No budget data found.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Reports and Analytics Content -->
+                    <div id="reports-analytics-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Reports and Analytics</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Generate various financial reports and analyze fiscal data.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="p-4 border border-gray-200 rounded-lg text-center hover:shadow-lg transition duration-200 cursor-pointer">
+                                    <i class="fas fa-chart-pie text-blue-500 text-3xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Expenditure Summary</p>
+                                </div>
+                                <div class="p-4 border border-gray-200 rounded-lg text-center hover:shadow-lg transition duration-200 cursor-pointer">
+                                    <i class="fas fa-file-excel text-green-500 text-3xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Budget vs Actual (CSV)</p>
+                                </div>
+                                <div class="p-4 border border-gray-200 rounded-lg text-center hover:shadow-lg transition duration-200 cursor-pointer">
+                                    <i class="fas fa-hand-holding-usd text-purple-500 text-3xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Disbursement Report</p>
+                                </div>
+                                <div class="p-4 border border-gray-200 rounded-lg text-center hover:shadow-lg transition duration-200 cursor-pointer">
+                                    <i class="fas fa-sitemap text-yellow-500 text-3xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">MDA Performance</p>
+                                </div>
+                            </div>
+                            <h4 class="text-lg font-semibold mt-8 mb-4 text-gray-700">Monthly Expenditure Trends</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <canvas id="monthlyExpenditureChart" width="400" height="200"></canvas>
+                            </div>
+                            <h4 class="text-lg font-semibold mt-8 mb-4 text-gray-700">Expenditure Breakdown by Category (2025)</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <canvas id="categoryExpenditureChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Voucher Content -->
+                    <div id="payment-voucher-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Payment Voucher</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Create and manage payment vouchers.</p>
+                            <form id="paymentVoucherForm" class="space-y-4">
+                                <div>
+                                    <label for="vendorName" class="block text-sm font-medium text-gray-700">Vendor Name</label>
+                                    <input type="text" id="vendorName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., ABC Contractors" required aria-required="true">
+                                    <span class="input-error-message" id="vendorNameError"></span>
+                                </div>
+                                <div>
+                                    <label for="amount" class="block text-sm font-medium text-gray-700">Amount (₦)</label>
+                                    <input type="number" id="amount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 15000000" required aria-required="true">
+                                    <span class="input-error-message" id="amountError"></span>
+                                </div>
+                                <div>
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea id="description" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Brief description of payment" required aria-required="true"></textarea>
+                                    <span class="input-error-message" id="descriptionError"></span>
+                                </div>
+                                <div>
+                                    <label for="dateIssued" class="block text-sm font-medium text-gray-700">Date Issued</label>
+                                    <input type="date" id="dateIssued" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required aria-required="true">
+                                    <span class="input-error-message" id="dateIssuedError"></span>
+                                </div>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Generate Voucher</button>
+                            </form>
+                            <p id="paymentVoucherSuccess" class="success-message" role="status">Payment voucher generated successfully!</p>
+                        </div>
+                    </div>
+
+                    <!-- Admin Settings Content -->
+                    <div id="admin-settings-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Admin Settings</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Configure system settings and manage user access.</p>
+                            <div class="space-y-6">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="text-lg font-semibold mb-2 text-gray-800">User Management</h4>
+                                    <p class="text-gray-600 mb-3">Add, edit, or remove system users and assign roles.</p>
+                                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Manage Users</button>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="text-lg font-semibold mb-2 text-gray-800">Fiscal Year Setup</h4>
+                                    <p class="text-gray-600 mb-3">Define and configure fiscal years for budgeting.</p>
+                                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Configure Fiscal Years</button>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="text-lg font-semibold mb-2 text-gray-800">Data Import/Export</h4>
+                                    <p class="text-gray-600 mb-3">Import new data or export existing records.</p>
+                                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Data Tools</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New: Audit Log Content -->
+                    <div id="audit-log-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Audit Log</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Review a chronological record of all system activities.</p>
+                            <ul id="auditLogList">
+                                <!-- Audit log items will be populated by JS -->
+                                <li class="no-data-message">No audit log entries found.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- New: My Profile Content -->
+                    <div id="my-profile-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">My Profile</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">Manage your personal information and security settings.</p>
+                            <form id="profileForm" class="space-y-4">
+                                <div>
+                                    <label for="profileUsername" class="block text-sm font-medium text-gray-700">Username</label>
+                                    <input type="text" id="profileUsername" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-100 cursor-not-allowed" readonly aria-readonly="true">
+                                </div>
+                                <div>
+                                    <label for="profileEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" id="profileEmail" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" aria-required="true">
+                                    <span class="input-error-message" id="profileEmailError"></span>
+                                </div>
+                                <div>
+                                    <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
+                                    <input type="password" id="currentPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <span class="input-error-message" id="currentPasswordError"></span>
+                                </div>
+                                <div>
+                                    <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
+                                    <input type="password" id="newPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <span class="input-error-message" id="newPasswordError"></span>
+                                </div>
+                                <div>
+                                    <label for="confirmNewPassword" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                                    <input type="password" id="confirmNewPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <span class="input-error-message" id="confirmNewPasswordError"></span>
+                                </div>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200">Save Profile Changes</button>
+                            </form>
+                            <p id="profileUpdateSuccess" class="success-message" role="status">Profile updated successfully!</p>
+                            <p id="profileUpdateError" class="error-message" role="alert">Error updating profile.</p>
+                        </div>
+                    </div>
+
+
+                    <!-- About Page Content -->
+                    <div id="about-content" class="content-section hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">About Zamfara Fiscal System</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <p class="text-gray-600 mb-4">
+                                The Zamfara Fiscal System is designed to provide comprehensive tools for managing the state's financial resources.
+                                Our mission is to enhance transparency, accountability, and efficiency in public finance.
+                            </p>
+                            <p class="text-gray-600 mb-4">
+                                Key features include budget tracking, expenditure monitoring, revenue analysis, and robust reporting capabilities.
+                                We aim to empower government agencies with real-time financial insights to make informed decisions and optimize resource allocation.
+                            </p>
+                            <p class="text-gray-600 text-sm">
+                                Version: 1.0.0 <br>
+                                Developed by: [Your Team/Organization Name] <br>
+                                Contact: support@zamfarafiscal.gov
+                            </p>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals and Overlays -->
+    <div class="modal-backdrop" id="logoutModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" aria-describedby="logoutModalDescription">
+        <div class="modal-content">
+            <h3 id="logoutModalTitle">Confirm Logout</h3>
+            <p id="logoutModalDescription">Are you sure you want to log out?</p>
+            <div class="modal-buttons">
+                <button class="confirm-btn" id="confirmLogoutBtn">Yes, Logout</button>
+                <button class="cancel-btn" id="cancelLogoutBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MDA Details Modal -->
+    <div class="modal-backdrop" id="mdaDetailModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="mdaDetailName">
+        <div class="modal-content profile-modal-content">
+            <h3 id="mdaDetailName">MDA Name</h3>
+            <p class="text-gray-600 mb-4">Detailed financial overview for this MDA.</p>
+            <div class="space-y-3 text-left text-gray-700">
+                <p><strong>Sector:</strong> <span id="mdaDetailSector"></span></p>
+                <p><strong>Total Budget:</strong> <span id="mdaDetailBudget"></span></p>
+                <p><strong>Actual Expenditure:</strong> <span id="mdaDetailSpent"></span></p>
+                <p><strong>Remaining Budget:</strong> <span id="mdaDetailRemaining"></span></p>
+                <h4 class="font-semibold mt-4 mb-2">Expenditure Breakdown (Simulated)</h4>
+                <canvas id="mdaDetailChart" width="300" height="150"></canvas>
+            </div>
+            <div class="profile-buttons">
+                <button class="close-btn" id="closeMdaDetailModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" role="status" aria-live="polite" aria-label="Loading content">
+        <div class="spinner"></div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const authPage = document.getElementById('authPage');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+            const registerFormContainer = document.getElementById('registerFormContainer');
+            const dashboardPage = document.getElementById('dashboardPage');
+
+            // Login Page Elements
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('errorMessage');
+            const usernameError = document.getElementById('usernameError'); // Specific error
+            const passwordError = document.getElementById('passwordError'); // Specific error
+            const showRegisterLink = document.getElementById('showRegisterLink');
+
+            // Registration Page Elements
+            const registerForm = document.getElementById('registerForm');
+            const regUsernameInput = document.getElementById('regUsername');
+            const regEmailInput = document.getElementById('regEmail');
+            const regPasswordInput = document.getElementById('regPassword');
+            const regConfirmPasswordInput = document.getElementById('regConfirmPassword');
+            const regUsernameError = document.getElementById('regUsernameError'); // Specific error
+            const regEmailError = document.getElementById('regEmailError'); // Specific error
+            const regPasswordError = document.getElementById('regPasswordError'); // Specific error
+            const regConfirmPasswordError = document.getElementById('regConfirmPasswordError'); // Specific error
+            const registerErrorMessage = document.getElementById('registerErrorMessage');
+            const registerSuccessMessage = document.getElementById('registerSuccessMessage');
+            const showLoginLink = document.getElementById('showLoginLink');
+
+            // Dashboard Elements
+            const navItems = document.querySelectorAll('.sidebar-nav-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            const dashboardTitle = document.querySelector('.dashboard-title');
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutModalBackdrop = document.getElementById('logoutModalBackdrop');
+            const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+            const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+
+            const totalBudgetEl = document.getElementById('totalBudget');
+            const totalSpentEl = document.getElementById('totalSpent');
+            const remainingBudgetEl = document.getElementById('remainingBudget');
+            const refreshDataBtn = document.getElementById('refreshDataBtn');
+            const recentActivityList = document.getElementById('recentActivityList');
+
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            // MDA Main Menu Elements
+            const mdaTableBody = document.getElementById('mdaTableBody');
+            const mdaFilterName = document.getElementById('mdaFilterName');
+            const mdaFilterSector = document.getElementById('mdaFilterSector');
+            const mdaApplyFilterBtn = document.getElementById('mdaApplyFilterBtn');
+            const mdaTableHeaders = document.querySelectorAll('#mda-menu-content th[data-sort]');
+            const exportMdaCsvBtn = document.getElementById('exportMdaCsvBtn');
+
+            // Budget Review Elements
+            const budgetTableBody = document.getElementById('budgetTableBody');
+            const budgetFilterYear = document.getElementById('budgetFilterYear');
+            const budgetFilterMda = document.getElementById('budgetFilterMda');
+            const budgetApplyFilterBtn = document.getElementById('budgetApplyFilterBtn');
+            const budgetTableHeaders = document.querySelectorAll('#budget-review-content th[data-sort]');
+            const exportBudgetCsvBtn = document.getElementById('exportBudgetCsvBtn');
+
+            // CAPEX Tracker Elements
+            const capexForm = document.getElementById('capexForm');
+            const capexFormSuccess = document.getElementById('capexFormSuccess');
+            const projectNameInput = document.getElementById('projectName');
+            const mdaSelectInput = document.getElementById('mdaSelect');
+            const allocatedAmountInput = document.getElementById('allocatedAmount');
+            const expendedAmountInput = document.getElementById('expendedAmount');
+            const statusInput = document.getElementById('status');
+            const projectNameError = document.getElementById('projectNameError');
+            const mdaSelectError = document.getElementById('mdaSelectError');
+            const allocatedAmountError = document.getElementById('allocatedAmountError');
+            const expendedAmountError = document.getElementById('expendedAmountError');
+            const statusError = document.getElementById('statusError');
+
+
+            // Payment Voucher Elements
+            const paymentVoucherForm = document.getElementById('paymentVoucherForm');
+            const paymentVoucherSuccess = document.getElementById('paymentVoucherSuccess');
+            const vendorNameInput = document.getElementById('vendorName');
+            const amountInput = document.getElementById('amount');
+            const descriptionInput = document.getElementById('description');
+            const dateIssuedInput = document.getElementById('dateIssued');
+            const vendorNameError = document.getElementById('vendorNameError');
+            const amountError = document.getElementById('amountError');
+            const descriptionError = document.getElementById('descriptionError');
+            const dateIssuedError = document.getElementById('dateIssuedError');
+
+            // Global Search Elements
+            const globalSearchInput = document.getElementById('globalSearchInput');
+
+            // My Profile Elements
+            const loggedInUsernameSpan = document.getElementById('loggedInUsername');
+            const profileForm = document.getElementById('profileForm');
+            const profileUsernameInput = document.getElementById('profileUsername');
+            const profileEmailInput = document.getElementById('profileEmail');
+            const currentPasswordInput = document.getElementById('currentPassword');
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+            const profileUpdateSuccess = document.getElementById('profileUpdateSuccess');
+            const profileUpdateError = document.getElementById('profileUpdateError');
+            const profileEmailError = document.getElementById('profileEmailError');
+            const currentPasswordError = document.getElementById('currentPasswordError');
+            const newPasswordError = document.getElementById('newPasswordError');
+            const confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+
+
+            // MDA Detail Modal Elements
+            const mdaDetailModalBackdrop = document.getElementById('mdaDetailModalBackdrop');
+            const mdaDetailName = document.getElementById('mdaDetailName');
+            const mdaDetailSector = document.getElementById('mdaDetailSector');
+            const mdaDetailBudget = document.getElementById('mdaDetailBudget');
+            const mdaDetailSpent = document.getElementById('mdaDetailSpent');
+            const mdaDetailRemaining = document.getElementById('mdaDetailRemaining');
+            const mdaDetailChartCanvas = document.getElementById('mdaDetailChart');
+            const closeMdaDetailModal = document.getElementById('closeMdaDetailModal');
+            let mdaDetailChartInstance;
+
+
+            // Simulated Data
+            const mdaData = [
+                { id: 1, mdaName: 'Ministry of Education', sector: 'Education', budget: 10000000000, spent: 8500000000 },
+                { id: 2, mdaName: 'Ministry of Health', sector: 'Health', budget: 8500000000, spent: 7800000000 },
+                { id: 3, mdaName: 'Ministry of Works', sector: 'Infrastructure', budget: 15000000000, spent: 14000000000 },
+                { id: 4, mdaName: 'Ministry of Agriculture', sector: 'Agriculture', budget: 7000000000, spent: 6500000000 },
+                { id: 5, mdaName: 'Ministry of Finance', sector: 'Administration', budget: 5000000000, spent: 4800000000 },
+                { id: 6, mdaName: 'Ministry of Justice', sector: 'Administration', budget: 2000000000, spent: 1800000000 },
+                { id: 7, mdaName: 'Ministry of Water Resources', sector: 'Infrastructure', budget: 6000000000, spent: 5500000000 },
+            ];
+
+            const budgetData = [
+                { id: 1, mda: 'Education', category: 'Salaries', year: '2025', allocated: 7000000000, spent: 6800000000, variance: 200000000 },
+                { id: 2, mda: 'Works', category: 'Projects', year: '2025', allocated: 12000000000, spent: 12500000000, variance: -500000000 },
+                { id: 3, mda: 'Health', category: 'Equipment', year: '2025', allocated: 3000000000, spent: 2900000000, variance: 100000000 },
+                { id: 4, mda: 'Education', category: 'Projects', year: '2024', allocated: 2000000000, spent: 1900000000, variance: 100000000 },
+                { id: 5, mda: 'Agriculture', category: 'Subsidies', year: '2025', allocated: 5000000000, spent: 4800000000, variance: 200000000 },
+            ];
+
+            const auditLog = [
+                { timestamp: '2025-08-01 10:30 AM', user: 'Yusuf Ali', action: 'Logged in', details: 'Successful login from IP 192.168.1.100' },
+                { timestamp: '2025-08-01 10:35 AM', user: 'Data Entry 1', action: 'Payment Voucher Generated', details: 'Voucher #PV00123 for Ministry of Works' },
+                { timestamp: '2025-08-01 11:00 AM', user: 'Yusuf Ali', action: 'Dashboard Data Refreshed', details: 'Updated budget figures and charts' },
+                { timestamp: '2025-08-01 11:15 AM', user: 'Auditor 1', action: 'Budget Review Filtered', details: 'Filtered budget for 2025, Education' },
+                { timestamp: '2025-08-01 11:30 AM', user: 'Data Entry 1', action: 'CAPEX Entry Added', details: 'Project: Road Construction Phase 3' },
+            ];
+
+            let expenditureChartInstance;
+            let capexOpexChartInstance;
+            let monthlyExpenditureChartInstance;
+            let categoryExpenditureChartInstance;
+
+            // --- Helper Functions ---
+            const showLoading = () => {
+                if (loadingOverlay) loadingOverlay.classList.add('show');
+            };
+
+            const hideLoading = () => {
+                if (loadingOverlay) loadingOverlay.classList.remove('show');
+            };
+
+            const formatCurrency = (value) => {
+                if (value === undefined || value === null) return 'N/A';
+                if (value >= 1000000000) {
+                    return `₦ ${Math.round(value / 1000000000)} B`;
+                } else if (value >= 1000000) {
+                    return `₦ ${Math.round(value / 1000000)} M`;
+                }
+                return `₦ ${value.toLocaleString()}`;
+            };
+
+            const isValidEmail = (email) => {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            };
+
+            // Function to show/hide specific input errors
+            const showInputError = (inputElement, errorMessageElement, message) => {
+                inputElement.classList.add('input-error');
+                errorMessageElement.textContent = message;
+                errorMessageElement.classList.add('show');
+                inputElement.setAttribute('aria-invalid', 'true');
+                inputElement.setAttribute('aria-describedby', errorMessageElement.id);
+            };
+
+            const hideInputError = (inputElement, errorMessageElement) => {
+                inputElement.classList.remove('input-error');
+                errorMessageElement.classList.remove('show');
+                inputElement.removeAttribute('aria-invalid');
+                inputElement.removeAttribute('aria-describedby');
+            };
+
+            // --- Sidebar Navigation Logic ---
+            const closeSidebar = () => {
+                if (sidebar) {
+                    sidebar.classList.remove('sidebar-open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            };
+
+            const openSidebar = () => {
+                if (sidebar) {
+                    sidebar.classList.add('sidebar-open');
+                    menuToggle.setAttribute('aria-expanded', 'true');
+                }
+                if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+            };
+
+            // --- Authentication Logic ---
+            const showPage = (pageToShow) => {
+                if (pageToShow === 'login' || pageToShow === 'register') {
+                    authPage.style.display = 'flex';
+                    loginFormContainer.classList.toggle('hidden', pageToShow !== 'login');
+                    registerFormContainer.classList.toggle('hidden', pageToShow !== 'register');
+                    dashboardPage.style.display = 'none';
+                } else {
+                    authPage.style.display = 'none';
+                    dashboardPage.style.display = 'grid';
+                    initializeDashboard();
+                    contentSections.forEach(section => section.classList.add('hidden'));
+                    const defaultContent = document.getElementById('dashboard-content');
+                    if (defaultContent) defaultContent.classList.remove('hidden');
+                    if (dashboardTitle) dashboardTitle.textContent = 'Dashboard';
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    const dashboardNavItem = document.querySelector('.sidebar-nav-item[data-content="dashboard"]');
+                    if (dashboardNavItem) dashboardNavItem.classList.add('active');
+                }
+            };
+
+            const checkLoginStatus = () => {
+                const loggedIn = localStorage.getItem('loggedIn');
+                const username = localStorage.getItem('username');
+                const userRole = localStorage.getItem('userRole');
+
+                if (loggedIn === 'true' && username && userRole) {
+                    showPage('dashboard');
+                    if (loggedInUsernameSpan) {
+                        loggedInUsernameSpan.textContent = username;
+                    }
+                    applyRoleBasedVisibility(userRole);
+                } else {
+                    showPage('login');
+                }
+            };
+
+            const handleLogin = (event) => {
+                event.preventDefault();
+                errorMessage.classList.remove('show');
+                hideInputError(usernameInput, usernameError);
+                hideInputError(passwordInput, passwordError);
+
+                let isValid = true;
+                if (usernameInput.value.trim() === '') {
+                    showInputError(usernameInput, usernameError, 'Username is required.');
+                    isValid = false;
+                }
+                if (passwordInput.value.trim() === '') {
+                    showInputError(passwordInput, passwordError, 'Password is required.');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                showLoading();
+
+                setTimeout(() => {
+                    const username = usernameInput.value;
+                    const password = passwordInput.value;
+
+                    let userRole = 'auditor';
+                    if (username === 'admin' && password === 'password123') {
+                        userRole = 'admin';
+                    } else if (username === 'data_entry' && password === 'password123') {
+                        userRole = 'data_entry';
+                    } else if (username === 'auditor' && password === 'password123') {
+                        userRole = 'auditor';
+                    } else {
+                        errorMessage.classList.add('show');
+                        hideLoading();
+                        return;
+                    }
+
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('userRole', userRole);
+                    showPage('dashboard');
+                    hideLoading();
+                    showNotification(`Welcome, ${username}! You are logged in as ${userRole}.`, 'success');
+                    auditLog.unshift({ timestamp: new Date().toLocaleString(), user: username, action: 'Logged in', details: `Successful login as ${userRole}` });
+                    renderAuditLog();
+                }, 1000);
+            };
+
+            const handleRegistration = (event) => {
+                event.preventDefault();
+                registerErrorMessage.classList.remove('show');
+                registerSuccessMessage.classList.remove('show');
+                hideInputError(regUsernameInput, regUsernameError);
+                hideInputError(regEmailInput, regEmailError);
+                hideInputError(regPasswordInput, regPasswordError);
+                hideInputError(regConfirmPasswordInput, regConfirmPasswordError);
+
+                let isValid = true;
+                let message = '';
+
+                if (regUsernameInput.value.trim().length < 3) {
+                    showInputError(regUsernameInput, regUsernameError, 'Username must be at least 3 characters.');
+                    isValid = false;
+                }
+                if (!isValidEmail(regEmailInput.value.trim())) {
+                    showInputError(regEmailInput, regEmailError, 'Invalid email format.');
+                    isValid = false;
+                }
+                if (regPasswordInput.value.length < 6) {
+                    showInputError(regPasswordInput, regPasswordError, 'Password must be at least 6 characters.');
+                    isValid = false;
+                }
+                if (regPasswordInput.value !== regConfirmPasswordInput.value) {
+                    showInputError(regConfirmPasswordInput, regConfirmPasswordError, 'Passwords do not match.');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                showLoading();
+
+                setTimeout(() => {
+                    const username = regUsernameInput.value.trim();
+                    // For demo, new registrations are 'data_entry' by default
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('userRole', 'data_entry');
+                    registerSuccessMessage.classList.add('show');
+                    console.log('Registration successful! Redirecting to dashboard.');
+                    registerForm.reset();
+                    setTimeout(() => {
+                        showPage('dashboard');
+                        hideLoading();
+                        showNotification('Registration successful! Welcome to the dashboard.', 'success');
+                        auditLog.unshift({ timestamp: new Date().toLocaleString(), user: username, action: 'Registered', details: 'New user registered with data_entry role' });
+                        renderAuditLog();
+                    }, 1500);
+                }, 1500);
+            };
+
+            const handleLogout = () => {
+                const username = localStorage.getItem('username');
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('username');
+                localStorage.removeItem('userRole');
+                logoutModalBackdrop.classList.remove('show');
+                showPage('login');
+                console.log('User logged out!');
+                showNotification('You have been logged out.', 'info');
+                auditLog.unshift({ timestamp: new Date().toLocaleString(), user: username || 'Unknown', action: 'Logged out', details: 'User logged out of the system' });
+                renderAuditLog();
+            };
+
+            // --- Role-Based Visibility ---
+            const applyRoleBasedVisibility = (userRole) => {
+                navItems.forEach(item => {
+                    const requiredRoles = item.dataset.roles ? item.dataset.roles.split(',') : ['admin', 'auditor', 'data_entry'];
+                    if (requiredRoles.includes(userRole)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            };
+
+            // --- Dashboard Initialization Function ---
+            const initializeDashboard = () => {
+                if (!expenditureChartInstance && document.getElementById('expenditureChart')) {
+                    try {
+                        expenditureChartInstance = new Chart(document.getElementById('expenditureChart').getContext('2d'), {
+                            type: 'bar', data: { labels: ['MDA 1', 'MDA 2', 'MDA 3', 'MDA 4', 'MDA 5'], datasets: [{ label: 'Allocated', data: [15, 12, 10, 11, 14], backgroundColor: '#3b82f6', borderRadius: 5 }, { label: 'Actual', data: [12, 10, 8, 9, 11], backgroundColor: '#10b981', borderRadius: 5 }] },
+                            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Amount (B)' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+                        });
+                    } catch (error) { console.error("Error initializing Expenditure Chart:", error); }
+                }
+
+                if (!capexOpexChartInstance && document.getElementById('capexOpexChart')) {
+                    try {
+                        capexOpexChartInstance = new Chart(document.getElementById('capexOpexChart').getContext('2d'), {
+                            type: 'doughnut', data: { labels: ['CAPEX', 'OPEX'], datasets: [{ data: [40, 60], backgroundColor: ['#3b82f6', '#14b8a6'], hoverOffset: 4 }] },
+                            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                        });
+                    } catch (error) { console.error("Error initializing CAPEX vs OPEX Chart:", error); }
+                }
+
+                if (!monthlyExpenditureChartInstance && document.getElementById('monthlyExpenditureChart')) {
+                    try {
+                        monthlyExpenditureChartInstance = new Chart(document.getElementById('monthlyExpenditureChart').getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                                datasets: [{
+                                    label: 'Monthly Expenditure (B)',
+                                    data: Array.from({length: 12}, () => Math.floor(Math.random() * 10 + 5)),
+                                    borderColor: '#4c51bf',
+                                    backgroundColor: 'rgba(76, 81, 191, 0.2)',
+                                    fill: true,
+                                    tension: 0.3
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: { beginAtZero: true, title: { display: true, text: 'Amount (B)' } }
+                                }
+                            }
+                        });
+                    } catch (error) { console.error("Error initializing Monthly Expenditure Chart:", error); }
+                }
+
+                if (!categoryExpenditureChartInstance && document.getElementById('categoryExpenditureChart')) {
+                    try {
+                        categoryExpenditureChartInstance = new Chart(document.getElementById('categoryExpenditureChart').getContext('2d'), {
+                            type: 'bar',
+                            data: {
+                                labels: ['Salaries', 'Projects', 'Equipment', 'Admin', 'Utilities'],
+                                datasets: [{
+                                    label: 'Expenditure (B)',
+                                    data: Array.from({length: 5}, () => Math.floor(Math.random() * 8 + 2)),
+                                    backgroundColor: ['#f6ad55', '#4299e1', '#667eea', '#9acd32', '#ed8936'],
+                                    borderRadius: 5
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: { stacked: true },
+                                    y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Amount (B)' } }
+                                }
+                            }
+                        });
+                    } catch (error) { console.error("Error initializing Category Expenditure Chart:", error); }
+                }
+
+
+                updateDashboardData();
+                filterAndSortMdaData(); // Call filter/sort to render tables initially
+                filterAndSortBudgetData(); // Call filter/sort to render tables initially
+                renderAuditLog();
+                applyRoleBasedVisibility(localStorage.getItem('userRole'));
+            };
+
+            // Function to update dashboard numbers and charts
+            const updateDashboardData = () => {
+                if (dashboardPage.style.display === 'grid') {
+                    showLoading();
+                    setTimeout(() => {
+                        const totalBudget = Math.floor(Math.random() * (100 - 40) + 40) * 1000000000;
+                        const totalSpent = Math.floor(Math.random() * (totalBudget * 0.8 - totalBudget * 0.2) + totalBudget * 0.2);
+                        const remaining = totalBudget - totalSpent;
+
+                        if (totalBudgetEl) totalBudgetEl.textContent = formatCurrency(totalBudget);
+                        if (totalSpentEl) totalSpentEl.textContent = formatCurrency(totalSpent);
+                        if (remainingBudgetEl) remainingBudgetEl.textContent = formatCurrency(remaining);
+
+                        const newAllocatedData = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10 + 5));
+                        const newActualData = newAllocatedData.map(val => Math.floor(val * (Math.random() * 0.4 + 0.6)));
+
+                        if (expenditureChartInstance) {
+                            expenditureChartInstance.data.datasets[0].data = newAllocatedData;
+                            expenditureChartInstance.data.datasets[1].data = newActualData;
+                            expenditureChartInstance.update();
+                        }
+
+                        const newCapex = Math.floor(Math.random() * 60 + 20);
+                        const newOpex = 100 - newCapex;
+
+                        if (capexOpexChartInstance) {
+                            capexOpexChartInstance.data.datasets[0].data = [newCapex, newOpex];
+                            capexOpexChartInstance.update();
+                        }
+
+                        if (monthlyExpenditureChartInstance) {
+                            monthlyExpenditureChartInstance.data.datasets[0].data = Array.from({length: 12}, () => Math.floor(Math.random() * 10 + 5));
+                            monthlyExpenditureChartInstance.update();
+                        }
+                        if (categoryExpenditureChartInstance) {
+                            categoryExpenditureChartInstance.data.datasets[0].data = Array.from({length: 5}, () => Math.floor(Math.random() * 8 + 2));
+                            categoryExpenditureChartInstance.update();
+                        }
+
+
+                        console.log("Dashboard data refreshed!");
+                        hideLoading();
+                        showNotification('Dashboard data refreshed successfully!', 'success');
+                        auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Dashboard Refreshed', details: 'Updated budget figures and charts' });
+                        renderAuditLog();
+                    }, 800);
+                }
+            };
+
+            // --- Global Notification System ---
+            const notificationContainer = document.createElement('div');
+            notificationContainer.id = 'notificationContainer';
+            notificationContainer.className = 'fixed top-4 right-4 z-[4000] space-y-2';
+            notificationContainer.setAttribute('aria-live', 'polite'); // Accessibility
+            document.body.appendChild(notificationContainer);
+
+            const showNotification = (message, type = 'info', duration = 3000) => {
+                const notification = document.createElement('div');
+                notification.className = `p-4 rounded-lg shadow-lg text-white font-semibold transition-all duration-300 ease-out transform translate-x-full opacity-0`;
+                notification.setAttribute('role', 'status'); // Accessibility
+
+                if (type === 'success') {
+                    notification.classList.add('bg-green-500');
+                } else if (type === 'error') {
+                    notification.classList.add('bg-red-500');
+                } else {
+                    notification.classList.add('bg-blue-500');
+                }
+
+                notification.textContent = message;
+                notificationContainer.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full', 'opacity-0');
+                    notification.classList.add('translate-x-0', 'opacity-100');
+                }, 10);
+
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-0', 'opacity-100');
+                    notification.classList.add('translate-x-full', 'opacity-0');
+                    notification.addEventListener('transitionend', () => notification.remove());
+                }, duration);
+            };
+
+            // --- Table Filtering and Sorting Logic (MDA Main Menu) ---
+            const renderMdaTable = (data) => {
+                if (!mdaTableBody) return;
+                mdaTableBody.innerHTML = ''; // Clear existing rows
+
+                if (data.length === 0) {
+                    mdaTableBody.insertAdjacentHTML('beforeend', '<tr><td colspan="4" class="no-data-message">No MDA data found.</td></tr>');
+                    return;
+                }
+
+                data.forEach(mda => {
+                    const row = `
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">${mda.mdaName}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">${mda.sector}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">₦ ${mda.budget.toLocaleString()}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">
+                                <button class="text-blue-600 hover:text-blue-800 font-medium view-mda-detail" data-mda-id="${mda.id}" aria-label="View details for ${mda.mdaName}">View</button>
+                            </td>
+                        </tr>
+                    `;
+                    mdaTableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                document.querySelectorAll('.view-mda-detail').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const mdaId = parseInt(e.target.dataset.mdaId);
+                        const mda = mdaData.find(m => m.id === mdaId);
+                        if (mda) {
+                            showMdaDetailModal(mda);
+                        }
+                    });
+                });
+            };
+
+            const filterAndSortMdaData = () => {
+                let filteredData = [...mdaData];
+
+                const nameFilter = mdaFilterName ? mdaFilterName.value.toLowerCase() : '';
+                const sectorFilter = mdaFilterSector ? mdaFilterSector.value : '';
+
+                if (nameFilter) {
+                    filteredData = filteredData.filter(mda => mda.mdaName.toLowerCase().includes(nameFilter));
+                }
+                if (sectorFilter) {
+                    filteredData = filteredData.filter(mda => mda.sector === sectorFilter);
+                }
+
+                const currentSortHeader = document.querySelector('#mda-menu-content th.sort-active');
+                if (currentSortHeader) {
+                    const sortBy = currentSortHeader.dataset.sort;
+                    const sortDirection = currentSortHeader.dataset.sortDirection || 'asc';
+
+                    filteredData.sort((a, b) => {
+                        let valA = a[sortBy];
+                        let valB = b[sortBy];
+
+                        if (typeof valA === 'string') {
+                            valA = valA.toLowerCase();
+                            valB = valB.toLowerCase();
+                        }
+
+                        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                        return 0;
+                    });
+                }
+
+                renderMdaTable(filteredData);
+            };
+
+            if (mdaApplyFilterBtn) mdaApplyFilterBtn.addEventListener('click', filterAndSortMdaData);
+            if (mdaFilterName) mdaFilterName.addEventListener('keyup', filterAndSortMdaData);
+            if (mdaFilterSector) mdaFilterSector.addEventListener('change', filterAndSortMdaData);
+
+            mdaTableHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortBy = header.dataset.sort;
+                    let sortDirection = header.dataset.sortDirection || 'asc';
+
+                    mdaTableHeaders.forEach(h => {
+                        h.classList.remove('sort-active');
+                        h.setAttribute('aria-sort', 'none');
+                        const icon = h.querySelector('.fa-sort, .fa-sort-up, .fa-sort-down');
+                        if (icon) {
+                            icon.classList.remove('fa-sort-up', 'fa-sort-down');
+                            icon.classList.add('fa-sort');
+                        }
+                    });
+
+                    if (header.dataset.sortDirection === sortDirection) { // If same header clicked, toggle direction
+                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    }
+                    header.classList.add('sort-active');
+                    header.setAttribute('aria-sort', sortDirection === 'asc' ? 'ascending' : 'descending');
+                    header.dataset.sortDirection = sortDirection;
+
+                    const icon = header.querySelector('.fa-sort, .fa-sort-up, .fa-sort-down');
+                    if (icon) {
+                        icon.classList.remove('fa-sort', 'fa-sort-up', 'fa-sort-down');
+                        icon.classList.add(sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+                    }
+
+                    filterAndSortMdaData();
+                });
+            });
+
+            // --- Data Export (MDA) ---
+            if (exportMdaCsvBtn) {
+                exportMdaCsvBtn.addEventListener('click', () => {
+                    const dataToExport = [...mdaData]; // Or filteredData if you want to export current view
+                    const headers = ['MDA Name', 'Sector', 'Budget (N)'];
+                    const csvRows = [
+                        headers.join(','),
+                        ...dataToExport.map(row => `${row.mdaName},${row.sector},${row.budget}`)
+                    ];
+                    const csvString = csvRows.join('\n');
+                    downloadCsv(csvString, 'mda_data.csv');
+                    showNotification('MDA data exported to CSV!', 'info');
+                    auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Data Exported', details: 'MDA data exported to CSV' });
+                    renderAuditLog();
+                });
+            }
+
+            // --- Table Filtering and Sorting Logic (Budget Review) ---
+            const renderBudgetTable = (data) => {
+                if (!budgetTableBody) return;
+                budgetTableBody.innerHTML = '';
+
+                if (data.length === 0) {
+                    budgetTableBody.insertAdjacentHTML('beforeend', '<tr><td colspan="5" class="no-data-message">No budget data found.</td></tr>');
+                    return;
+                }
+
+                data.forEach(item => {
+                    const varianceClass = item.variance < 0 ? 'text-red-600' : 'text-green-600';
+                    const row = `
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">${item.mda}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">${item.category}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">₦ ${item.allocated.toLocaleString()}</td>
+                            <td class="py-3 px-4 border-b text-sm text-gray-700">₦ ${item.spent.toLocaleString()}</td>
+                            <td class="py-3 px-4 border-b text-sm ${varianceClass}">₦ ${item.variance.toLocaleString()}</td>
+                        </tr>
+                    `;
+                    budgetTableBody.insertAdjacentHTML('beforeend', row);
+                });
+            };
+
+            const filterAndSortBudgetData = () => {
+                let filteredData = [...budgetData];
+
+                const yearFilter = budgetFilterYear ? budgetFilterYear.value : '';
+                const mdaFilter = budgetFilterMda ? budgetFilterMda.value : '';
+
+                if (yearFilter) {
+                    filteredData = filteredData.filter(item => item.year === yearFilter);
+                }
+                if (mdaFilter) {
+                    filteredData = filteredData.filter(item => item.mda === mdaFilter);
+                }
+
+                const currentSortHeader = document.querySelector('#budget-review-content th.sort-active');
+                if (currentSortHeader) {
+                    const sortBy = currentSortHeader.dataset.sort;
+                    const sortDirection = currentSortHeader.dataset.sortDirection || 'asc';
+
+                    filteredData.sort((a, b) => {
+                        let valA = a[sortBy];
+                        let valB = b[sortBy];
+
+                        if (typeof valA === 'string') {
+                            valA = valA.toLowerCase();
+                            valB = valB.toLowerCase();
+                        }
+
+                        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                        return 0;
+                    });
+                }
+
+                renderBudgetTable(filteredData);
+            };
+
+            if (budgetApplyFilterBtn) budgetApplyFilterBtn.addEventListener('click', filterAndSortBudgetData);
+            if (budgetFilterYear) budgetFilterYear.addEventListener('change', filterAndSortBudgetData);
+            if (budgetFilterMda) budgetFilterMda.addEventListener('change', filterAndSortBudgetData);
+
+            budgetTableHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortBy = header.dataset.sort;
+                    let sortDirection = header.dataset.sortDirection || 'asc';
+
+                    budgetTableHeaders.forEach(h => {
+                        h.classList.remove('sort-active');
+                        h.setAttribute('aria-sort', 'none');
+                        const icon = h.querySelector('.fa-sort, .fa-sort-up, .fa-sort-down');
+                        if (icon) {
+                            icon.classList.remove('fa-sort-up', 'fa-sort-down');
+                            icon.classList.add('fa-sort');
+                        }
+                    });
+
+                    if (header.dataset.sortDirection === sortDirection) {
+                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    }
+                    header.classList.add('sort-active');
+                    header.setAttribute('aria-sort', sortDirection === 'asc' ? 'ascending' : 'descending');
+                    header.dataset.sortDirection = sortDirection;
+
+                    const icon = header.querySelector('.fa-sort, .fa-sort-up, .fa-sort-down');
+                    if (icon) {
+                        icon.classList.remove('fa-sort', 'fa-sort-up', 'fa-sort-down');
+                        icon.classList.add(sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+                    }
+
+                    filterAndSortBudgetData();
+                });
+            });
+
+            // --- Data Export (Budget) ---
+            if (exportBudgetCsvBtn) {
+                exportBudgetCsvBtn.addEventListener('click', () => {
+                    const dataToExport = [...budgetData];
+                    const headers = ['MDA', 'Category', 'Year', 'Allocated (N)', 'Spent (N)', 'Variance (N)'];
+                    const csvRows = [
+                        headers.join(','),
+                        ...dataToExport.map(row => `${row.mda},${row.category},${row.year},${row.allocated},${row.spent},${row.variance}`)
+                    ];
+                    const csvString = csvRows.join('\n');
+                    downloadCsv(csvString, 'budget_data.csv');
+                    showNotification('Budget data exported to CSV!', 'info');
+                    auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Data Exported', details: 'Budget data exported to CSV' });
+                    renderAuditLog();
+                });
+            }
+
+            // Helper function to download CSV
+            const downloadCsv = (csvString, filename) => {
+                const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            };
+
+
+            // --- Form Submission Feedback ---
+            if (capexForm) {
+                capexForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    hideInputError(projectNameInput, projectNameError);
+                    hideInputError(mdaSelectInput, mdaSelectError);
+                    hideInputError(allocatedAmountInput, allocatedAmountError);
+                    hideInputError(expendedAmountInput, expendedAmountError);
+                    hideInputError(statusInput, statusError);
+
+                    let isValid = true;
+                    if (projectNameInput.value.trim() === '') { showInputError(projectNameInput, projectNameError, 'Project Name is required.'); isValid = false; }
+                    if (mdaSelectInput.value.trim() === '') { showInputError(mdaSelectInput, mdaSelectError, 'MDA selection is required.'); isValid = false; }
+                    if (allocatedAmountInput.value.trim() === '' || isNaN(allocatedAmountInput.value)) { showInputError(allocatedAmountInput, allocatedAmountError, 'Allocated amount is required and must be a number.'); isValid = false; }
+                    if (expendedAmountInput.value.trim() === '' || isNaN(expendedAmountInput.value)) { showInputError(expendedAmountInput, expendedAmountError, 'Expended amount is required and must be a number.'); isValid = false; }
+                    if (statusInput.value.trim() === '') { showInputError(statusInput, statusError, 'Status is required.'); isValid = false; }
+
+                    if (!isValid) return;
+
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        capexFormSuccess.classList.add('show');
+                        capexForm.reset();
+                        showNotification('CAPEX entry added successfully!', 'success');
+                        auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'CAPEX Entry Added', details: `Project: ${e.target.projectName.value}` });
+                        renderAuditLog();
+                        setTimeout(() => capexFormSuccess.classList.remove('show'), 3000);
+                    }, 1000);
+                });
+            }
+
+            if (paymentVoucherForm) {
+                paymentVoucherForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    hideInputError(vendorNameInput, vendorNameError);
+                    hideInputError(amountInput, amountError);
+                    hideInputError(descriptionInput, descriptionError);
+                    hideInputError(dateIssuedInput, dateIssuedError);
+
+                    let isValid = true;
+                    if (vendorNameInput.value.trim() === '') { showInputError(vendorNameInput, vendorNameError, 'Vendor Name is required.'); isValid = false; }
+                    if (amountInput.value.trim() === '' || isNaN(amountInput.value)) { showInputError(amountInput, amountError, 'Amount is required and must be a number.'); isValid = false; }
+                    if (descriptionInput.value.trim() === '') { showInputError(descriptionInput, descriptionError, 'Description is required.'); isValid = false; }
+                    if (dateIssuedInput.value.trim() === '') { showInputError(dateIssuedInput, dateIssuedError, 'Date Issued is required.'); isValid = false; }
+
+                    if (!isValid) return;
+
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        paymentVoucherSuccess.classList.add('show');
+                        paymentVoucherForm.reset();
+                        showNotification('Payment voucher generated successfully!', 'success');
+                        auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Payment Voucher Generated', details: `Vendor: ${e.target.vendorName.value}, Amount: ${e.target.amount.value}` });
+                        renderAuditLog();
+                        setTimeout(() => paymentVoucherSuccess.classList.remove('show'), 3000);
+                    }, 1000);
+                });
+            }
+
+            // --- Audit Log Functionality ---
+            const renderAuditLog = () => {
+                if (!recentActivityList || !document.getElementById('auditLogList')) return;
+
+                // Clear existing content
+                recentActivityList.innerHTML = '';
+                document.getElementById('auditLogList').innerHTML = '';
+
+                if (auditLog.length === 0) {
+                    recentActivityList.insertAdjacentHTML('beforeend', '<li class="no-data-message">No recent activity.</li>');
+                    document.getElementById('auditLogList').insertAdjacentHTML('beforeend', '<li class="no-data-message">No audit log entries found.</li>');
+                    return;
+                }
+
+                auditLog.forEach((log, index) => {
+                    const listItem = `
+                        <li class="py-2">
+                            <span class="text-gray-900">${log.timestamp}</span> -
+                            <span class="text-blue-600">${log.user}</span>
+                            <span class="text-gray-700">${log.action}:</span>
+                            <span class="text-gray-600">${log.details}</span>
+                        </li>
+                    `;
+                    // Add to recent activity (first 5 on dashboard)
+                    if (index < 5) {
+                        recentActivityList.insertAdjacentHTML('beforeend', listItem);
+                    }
+                    // Add to full audit log page
+                    document.getElementById('auditLogList').insertAdjacentHTML('beforeend', listItem);
+                });
+            };
+
+            // --- Global Search Functionality ---
+            if (globalSearchInput) {
+                globalSearchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const searchTerm = globalSearchInput.value.trim();
+                        if (searchTerm) {
+                            showNotification(`Simulating search for "${searchTerm}"...`, 'info', 2500);
+                            setTimeout(() => {
+                                showNotification(`Found 3 results for "${searchTerm}" (simulated).`, 'success', 3000);
+                                auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Global Search', details: `Searched for "${searchTerm}"` });
+                                renderAuditLog();
+                            }, 1500);
+                        }
+                    }
+                });
+            }
+
+            // --- My Profile Functionality ---
+            if (profileForm) {
+                profileForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    profileUpdateSuccess.classList.remove('show');
+                    profileUpdateError.classList.remove('show');
+                    hideInputError(profileEmailInput, profileEmailError);
+                    hideInputError(currentPasswordInput, currentPasswordError);
+                    hideInputError(newPasswordInput, newPasswordError);
+                    hideInputError(confirmNewPasswordInput, confirmNewPasswordError);
+
+                    showLoading();
+
+                    setTimeout(() => {
+                        const currentPassword = currentPasswordInput.value;
+                        const newPassword = newPasswordInput.value;
+                        const confirmNewPassword = confirmNewPasswordInput.value;
+                        const profileEmail = profileEmailInput.value.trim();
+
+                        let isValid = true;
+                        let message = '';
+
+                        if (!isValidEmail(profileEmail)) {
+                            showInputError(profileEmailInput, profileEmailError, 'Invalid email format.');
+                            isValid = false;
+                        }
+
+                        if (currentPassword || newPassword || confirmNewPassword) { // If any password field is touched
+                            if (currentPassword !== 'password123') { // Simulate current password check
+                                showInputError(currentPasswordInput, currentPasswordError, 'Incorrect current password.');
+                                isValid = false;
+                            }
+                            if (newPassword && newPassword.length < 6) {
+                                showInputError(newPasswordInput, newPasswordError, 'New password must be at least 6 characters.');
+                                isValid = false;
+                            }
+                            if (newPassword !== confirmNewPassword) {
+                                showInputError(confirmNewPasswordInput, confirmNewPasswordError, 'New passwords do not match.');
+                                isValid = false;
+                            }
+                            if (!newPassword && currentPassword) { // If current password entered but no new password
+                                showInputError(newPasswordInput, newPasswordError, 'New password is required.');
+                                isValid = false;
+                            }
+                        }
+
+                        if (isValid) {
+                            localStorage.setItem('userEmail', profileEmail);
+                            profileUpdateSuccess.classList.add('show');
+                            showNotification('Profile updated successfully!', 'success');
+                            auditLog.unshift({ timestamp: new Date().toLocaleString(), user: localStorage.getItem('username'), action: 'Profile Updated', details: 'User updated profile details' });
+                            renderAuditLog();
+                            currentPasswordInput.value = '';
+                            newPasswordInput.value = '';
+                            confirmNewPasswordInput.value = '';
+                        } else {
+                            profileUpdateError.textContent = message;
+                            profileUpdateError.classList.add('show');
+                            showNotification(message, 'error');
+                        }
+                        hideLoading();
+                        setTimeout(() => {
+                            profileUpdateSuccess.classList.remove('show');
+                            profileUpdateError.classList.remove('show');
+                        }, 3000);
+                    }, 1500);
+                });
+            }
+
+            // Populate profile form when My Profile page is active
+            if (document.querySelector('.sidebar-nav-item[data-content="my-profile"]')) {
+                document.querySelector('.sidebar-nav-item[data-content="my-profile"]').addEventListener('click', () => {
+                    if (profileUsernameInput) profileUsernameInput.value = localStorage.getItem('username') || '';
+                    if (profileEmailInput) profileEmailInput.value = localStorage.getItem('userEmail') || 'user@example.com';
+                });
+            }
+            // Direct User Profile Navigation from header username
+            if (loggedInUsernameSpan) {
+                loggedInUsernameSpan.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.sidebar-nav-item.active')?.classList.remove('active'); // Deactivate current
+                    const myProfileNavItem = document.querySelector('.sidebar-nav-item[data-content="my-profile"]');
+                    if (myProfileNavItem) {
+                        myProfileNavItem.classList.add('active');
+                        showPage('dashboard'); // Ensure dashboard is visible
+                        contentSections.forEach(section => section.classList.add('hidden'));
+                        document.getElementById('my-profile-content').classList.remove('hidden');
+                        dashboardTitle.textContent = 'My Profile';
+                    }
+                });
+            }
+
+
+            // --- General Event Listeners ---
+            if (loginForm) loginForm.addEventListener('submit', handleLogin);
+            if (registerForm) registerForm.addEventListener('submit', handleRegistration);
+
+            if (showRegisterLink) showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); showPage('register'); });
+            if (showLoginLink) showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showPage('login'); });
+            if (document.getElementById('forgotPasswordLink')) {
+                document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showNotification('Password reset link sent to your email (simulated).', 'info');
+                });
+            }
+
+            if (logoutBtn) logoutBtn.addEventListener('click', () => logoutModalBackdrop.classList.add('show'));
+            if (confirmLogoutBtn) confirmLogoutBtn.addEventListener('click', handleLogout);
+            if (cancelLogoutBtn) cancelLogoutBtn.addEventListener('click', () => logoutModalBackdrop.classList.remove('show'));
+            if (logoutModalBackdrop) {
+                logoutModalBackdrop.addEventListener('click', (event) => {
+                    if (event.target === logoutModalBackdrop) {
+                        logoutModalBackdrop.classList.remove('show');
+                    }
+                });
+            }
+
+            // Sidebar & Mobile Menu Listeners
+            if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    contentSections.forEach(section => section.classList.add('hidden'));
+                    const targetContentId = item.dataset.content + '-content';
+                    const targetContent = document.getElementById(targetContentId);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                    if (dashboardTitle) {
+                        const newTitle = item.dataset.content.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                        dashboardTitle.textContent = newTitle === 'Dashboard' ? 'Dashboard' : newTitle;
+                    }
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            if (refreshDataBtn) refreshDataBtn.addEventListener('click', updateDashboardData);
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+                if (expenditureChartInstance) expenditureChartInstance.resize();
+                if (capexOpexChartInstance) capexOpexChartInstance.resize();
+                if (monthlyExpenditureChartInstance) monthlyExpenditureChartInstance.resize();
+                if (categoryExpenditureChartInstance) categoryExpenditureChartInstance.resize();
+                if (mdaDetailChartInstance) mdaDetailChartInstance.resize();
+            });
+
+            checkLoginStatus();
+        });
+    </script>
+</body>
+</html>
